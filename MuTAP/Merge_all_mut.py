@@ -1,5 +1,6 @@
 import os
 import sys
+from model import MODEL
 
 
 def paths_list(dir_path):
@@ -42,10 +43,10 @@ def Mut_all_in_one (DATASET, SCRIPT, code_string, script_string, output_string):
                 "Testing_" + DATASET, 
                 "",
             )
-    Script_path = os.path.join(CODE_DIR,  SCRIPT, "Codex")
+    Script_path = os.path.join(CODE_DIR,  SCRIPT, MODEL)
 
     code_name =  code_string + SCRIPT + ".py"
-    code_path = os.path.join(CODE_DIR,  SCRIPT, "Codex", code_name)
+    code_path = os.path.join(CODE_DIR,  SCRIPT, MODEL, code_name)
 
     with open(code_path) as input:
         function_to_test = input.read()
@@ -59,7 +60,7 @@ def Mut_all_in_one (DATASET, SCRIPT, code_string, script_string, output_string):
         test= ""
 
     OUTPUT_NAME =  output_string + SCRIPT + ".py"
-    OUTPUT_PATH = os.path.join(CODE_DIR, SCRIPT, "Codex", OUTPUT_NAME)
+    OUTPUT_PATH = os.path.join(CODE_DIR, SCRIPT, MODEL, OUTPUT_NAME)
 
     lst_script= paths_list(Script_path)
     

@@ -1,8 +1,9 @@
 import os
 import subprocess
 import sys
+from model import MODEL
 
-def check_test_oracle_sematic(function_to_correct):
+def check_test_oracle_semantic(function_to_correct):
     if not os.path.exists(os.path.join(os.getcwd(), "temp_dir")):
         os.mkdir(os.path.join(os.getcwd(), "temp_dir"))
 
@@ -143,10 +144,10 @@ def apply_semantix_fix (DATASET, SCRIPT, script_string, output_string, csv_name)
             )
     
     script_name = script_string + SCRIPT + ".py"
-    input_path = os.path.join(CODE_DIR,  SCRIPT, "Codex", script_name)
+    input_path = os.path.join(CODE_DIR,  SCRIPT, MODEL, script_name)
 
     output_name = output_string + SCRIPT + ".py"
-    output_path = os.path.join(CODE_DIR,  SCRIPT, "Codex", output_name)
+    output_path = os.path.join(CODE_DIR,  SCRIPT, MODEL, output_name)
 
     csv_path = os.path.join(CODE_DIR, csv_name)
     
@@ -156,7 +157,7 @@ def apply_semantix_fix (DATASET, SCRIPT, script_string, output_string, csv_name)
         function_to_correct = input.read()
 
 
-    all_content, semantic_fix, total = check_test_oracle_sematic(function_to_correct)
+    all_content, semantic_fix, total = check_test_oracle_semantic(function_to_correct)
 
     with open(output_path, "w") as output:
         output.write(all_content)
@@ -194,7 +195,7 @@ def main():
                 "",
                 )
                 script_name = input_string + task_num + ".py"
-                input_path = os.path.join(CODE_DIR,  task_num, "Codex", script_name)  
+                input_path = os.path.join(CODE_DIR,  task_num, MODEL, script_name)  
                 if os.path.exists(input_path):
                     apply_semantix_fix(DATASET,task_num, input_string, output_string, semantic_report)
 
@@ -207,7 +208,7 @@ def main():
                 )
                 SCRIPT_num = "q"+str(task_num)
                 script_name = input_string + SCRIPT_num + ".py"
-                input_path = os.path.join(CODE_DIR,  SCRIPT_num, "Codex", script_name)  
+                input_path = os.path.join(CODE_DIR,  SCRIPT_num, MODEL, script_name)  
                 if os.path.exists(input_path):
                     apply_semantix_fix(DATASET, SCRIPT_num, input_string, output_string, semantic_report)
 

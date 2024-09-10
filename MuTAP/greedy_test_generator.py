@@ -3,6 +3,7 @@ import subprocess
 from typing import List, Dict
 import tqdm
 import sys
+from model import MODEL
 
 
 def directory_crawler(directory_to_crawl) -> dict:
@@ -21,11 +22,11 @@ def directory_crawler(directory_to_crawl) -> dict:
         directory_to_crawl_question = directory_to_crawl + question
         for root, dirs, files in os.walk(os.path.join(os.getcwd(), directory_to_crawl_question)):
             # we're only interested in the directories that contain "Copilot" and "Mutants"
-            if "Codex" and "Mutants" in dirs:
+            if MODEL and "Mutants" in dirs:
                 result[root] = {}
 
                 for dir in dirs:
-                    if dir == "Codex":
+                    if dir == MODEL:
                         # list all the files that begin with "test_"
                         result[root]["tests"] = [
                             os.path.join(root, dir, file)

@@ -3,6 +3,8 @@ from ast import literal_eval
 import os
 from generate_test_oracle import call_LLMs
 import sys
+from model import MODEL
+
 
 def mutatePromptGenerator(function_to_test, mutant):
     mutate_prompt = f""" Generate test cases for
@@ -60,7 +62,7 @@ def prompt_augmentation (prmpt, DATASET,num, input_string, output_string, mut_re
                 "",
         )
         script_name = input_string + SCRIPT + ".py"
-        input_path = os.path.join(CODE_DIR_HE , SCRIPT, "Codex", script_name)
+        input_path = os.path.join(CODE_DIR_HE , SCRIPT, MODEL, script_name)
         mut_dt = read_csv(os.path.join(CODE_DIR_HE,  mut_report_name))
         
     elif DATASET == "Refactory":
@@ -72,7 +74,7 @@ def prompt_augmentation (prmpt, DATASET,num, input_string, output_string, mut_re
                 )
         SCRIPT_num = "q"+str(num)
         script_name = input_string + SCRIPT_num + ".py"
-        input_path = os.path.join(CODE_DIR_RF , SCRIPT_num, "Codex", script_name)
+        input_path = os.path.join(CODE_DIR_RF , SCRIPT_num, MODEL, script_name)
         mut_dt = read_csv(os.path.join(CODE_DIR_RF,  mut_report_name))
    
 
@@ -81,12 +83,15 @@ def prompt_augmentation (prmpt, DATASET,num, input_string, output_string, mut_re
 
    
     PUT_inx=-200
-    PUT_inx = mut_dt.index[mut_dt['name'] == script_name]
+    PUT_inx = next(iter(mut_dt.index[mut_dt['name'] == script_name]), -200)
+    print(PUT_inx)
 
    
     if PUT_inx>=0:
         row = mut_dt.iloc[PUT_inx]
         print(row)
+        if isinstance(row['MS'], pd.Series):
+            row = {k: v[0] for k, v in row.to_dict().items()}
         if row['MS'] <1 and row['is_problematic'] != 2:
 
             with open(input_path) as input:
@@ -128,10 +133,10 @@ def prompt_augmentation (prmpt, DATASET,num, input_string, output_string, mut_re
                 print(file_content)
                 if DATASET == "HumanEval":
                     OUTPUT_NAME =  output_string + SCRIPT + "_" + str(j) + ".py"
-                    output_path = os.path.join(CODE_DIR_HE, SCRIPT, "Codex", OUTPUT_NAME)
+                    output_path = os.path.join(CODE_DIR_HE, SCRIPT, MODEL, OUTPUT_NAME)
                 elif DATASET == "Refactory":
                     OUTPUT_NAME =  output_string + SCRIPT_num + "_" + str(j) + ".py"
-                    output_path = os.path.join(CODE_DIR_RF, SCRIPT_num, "Codex", OUTPUT_NAME)
+                    output_path = os.path.join(CODE_DIR_RF, SCRIPT_num, MODEL, OUTPUT_NAME)
 
                 j +=1
                 with open(output_path, "w") as output:

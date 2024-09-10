@@ -2,6 +2,7 @@ import os
 import subprocess
 import pandas as pd
 import sys
+from model import MODEL
 
 
 def paths_list(dir_path):
@@ -30,7 +31,7 @@ def MS_generator (DATASET, SCRIPT, script_string, csv_name):
         all_mutants = len(lst_mut)
 
         SCRIPT_NAME =  script_string + SCRIPT + ".py"
-        SCRIPT_PATH = os.path.join(CODE_DIR,  "Tests", SCRIPT, "Codex", SCRIPT_NAME)
+        SCRIPT_PATH = os.path.join(CODE_DIR,  "Tests", SCRIPT, MODEL, SCRIPT_NAME)
     else:
         CODE_DIR = os.path.join(
                 os.getcwd(),
@@ -44,7 +45,7 @@ def MS_generator (DATASET, SCRIPT, script_string, csv_name):
         all_mutants = len(lst_mut)-1
 
         SCRIPT_NAME =  script_string + SCRIPT + ".py"
-        SCRIPT_PATH = os.path.join(CODE_DIR,  SCRIPT, "Codex", SCRIPT_NAME)
+        SCRIPT_PATH = os.path.join(CODE_DIR,  SCRIPT, MODEL, SCRIPT_NAME)
 
     with open(SCRIPT_PATH) as input:
         code_to_content = input.read()
@@ -145,7 +146,8 @@ def MS_generator (DATASET, SCRIPT, script_string, csv_name):
            # mut_file.write("\n")
     #mut_file.close()
 
-    result_dt.to_csv(mutation_csv_path, mode='a', index=False, header=False)
+#    result_dt.to_csv(mutation_csv_path, mode='a', index=False, header=False)
+    result_dt.to_csv(mutation_csv_path, mode='a', index=False, header=(not os.path.exists(mutation_csv_path)))
 
 
 

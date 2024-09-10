@@ -2,10 +2,12 @@ import ast
 import re
 import openai 
 import os
-#from Sematic_err_correction import check_test_oracle_sematic
+#from semantic_err_correction import check_test_oracle_semantic
 import sys
+from model import MODEL
 
-openai.api_key = "My_key"
+openai.api_key = os.environ['OPENAI_API_KEY']
+
 #a function to generate the intial prompt to call the model
 def initalPromptGenerator(function_to_test):
     inital_prompt = f""" Generate test cases for
@@ -51,7 +53,8 @@ def synxtaxCheck(test_oracle):
     try:
         ast.parse(test_oracle)
         return False
-    except SyntaxError:
+    except SyntaxError as e:
+        print(f"*** {e}")
         return True
     
 #fix the syntax erro of the test oracle by eliminating the lines with the error
@@ -73,26 +76,53 @@ def call_prompt_on_model(
     prompt: str,  
     stop_w: str ,  
     max_tokens: int ,  
-    code_model: str = "code-cushman-001",  
+    code_model: str = "gpt-4o-2024-05-13", #"code-cushman-001",  
     temperature: float = 0.8,  
     reruns_if_empty: int = 2,  
     reruns_no_assert: int = 2, 
 ) -> str:
     
     
-    explanation_response = openai.Completion.create(
-    model=code_model,
-    prompt=prompt,
-    stop=stop_w,
-    max_tokens=max_tokens,
-    temperature=temperature,
-    stream=True,
-    )
+    if code_model.startswith("gpt"):
+        client = openai.OpenAI()
+        completion = client.chat.completions.create(
+            model=code_model,
+            messages=[
+                {"role": "system", "content": "Respond with a completion in EXACTLY the same format as the code-davinci-002 model, including any tags."},
+                {"role": "user", "content": prompt}
+            ],
+            stop=stop_w,
+#            max_tokens=max_tokens,
+            temperature=temperature,
+#            stream=True,
+        )
 
-    explanation_completion = ""
-    for event in explanation_response:
-        event_text = event["choices"][0]["text"]
-        explanation_completion += event_text
+        explanation_completion = completion.choices[0].message.content
+
+        if (m := re.search(r'```python\n(.*?)(?:```|\Z)', explanation_completion, re.DOTALL)):
+            explanation_completion = m.group(1)
+
+        if (m := re.search(r'\ndef test\(\):\n(.*)$', explanation_completion, re.DOTALL)):
+            explanation_completion = m.group(1)
+        print(f"""\
+-----
+{explanation_completion}
+----
+""")
+    else:
+        explanation_response = openai.Completion.create(
+            model=code_model,
+            prompt=prompt,
+            stop=stop_w,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            stream=True,
+        )
+
+        explanation_completion = ""
+        for event in explanation_response:
+            event_text = event["choices"][0]["text"]
+            explanation_completion += event_text
 
     if reruns_if_empty>0 and all(elem == '\n' for elem in explanation_completion):
         print("empty output")
@@ -178,12 +208,12 @@ def generate_test_oracle_intial(prmpt, DATASET, SCRIPT, name_string, output_stri
     SCRIPT_PATH = os.path.join(CODE_DIR, SCRIPT, SCRIPT_NAME)
 
     os.makedirs(
-        os.path.join(CODE_DIR, SCRIPT, "Codex"),
+        os.path.join(CODE_DIR, SCRIPT, MODEL),
         exist_ok=True,
     )
 
     OUTPUT_NAME =  output_string + SCRIPT + ".py"
-    OUTPUT_PATH = os.path.join(CODE_DIR, SCRIPT, "Codex", OUTPUT_NAME)
+    OUTPUT_PATH = os.path.join(CODE_DIR, SCRIPT, MODEL, OUTPUT_NAME)
 
     if prmpt == "fewshot":
         FEWSHOT_DIR = os.path.join(CODE_DIR, "few_shot_query.py")
@@ -211,12 +241,12 @@ def generate_test_oracle_student(prmpt, DATASET, SCRIPT, name_string, output_str
     SCRIPT_PATH = os.path.join(CODE_DIR, SCRIPT, SCRIPT_NAME)
 
     os.makedirs(
-        os.path.join(CODE_DIR,"Codex"),
+        os.path.join(CODE_DIR,MODEL),
         exist_ok=True,
     )
 
     OUTPUT_NAME =  output_string + SCRIPT + ".py"
-    OUTPUT_PATH = os.path.join(CODE_DIR, SCRIPT, "Codex", OUTPUT_NAME)
+    OUTPUT_PATH = os.path.join(CODE_DIR, SCRIPT, MODEL, OUTPUT_NAME)
 
     if prmpt == "fewshot":
         FEWSHOT_DIR = os.path.join(CODE_DIR, "few_shot_query.py")
@@ -274,10 +304,10 @@ def apply_syntax_fix (DATASET, SCRIPT, name_string, output_string, csv_name):
             )
     
     script_name =  name_string + SCRIPT + ".py"
-    input_path = os.path.join(CODE_DIR,  SCRIPT, "Codex", script_name)
+    input_path = os.path.join(CODE_DIR,  SCRIPT, MODEL, script_name)
 
     output_name =  output_string + SCRIPT + ".py"
-    output_path = os.path.join(CODE_DIR,  SCRIPT, "Codex", output_name)
+    output_path = os.path.join(CODE_DIR,  SCRIPT, MODEL, output_name)
 
     csv_path = os.path.join(CODE_DIR, csv_name)
 

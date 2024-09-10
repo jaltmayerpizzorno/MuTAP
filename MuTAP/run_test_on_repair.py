@@ -1,6 +1,7 @@
 import os
 import subprocess
 import pandas as pd
+from model import MODEL
 
 script_string = "T_O_NDS_semticfixed_"
 
@@ -30,7 +31,7 @@ lst_repair= paths_list(repair_paths)
 all_repair = len(lst_repair)
 
 test_NAME =  script_string + SCRIPT + ".py"
-test_PATH = os.path.join(CODE_DIR,  "Tests", SCRIPT, "Codex", test_NAME)
+test_PATH = os.path.join(CODE_DIR,  "Tests", SCRIPT, MODEL, test_NAME)
 
 num_pass =0 
 

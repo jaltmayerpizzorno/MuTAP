@@ -1,9 +1,10 @@
 import os
 import subprocess
 from generate_test_oracle import synxtaxCheck
+from model import MODEL
 
 
-def check_test_oracle_sematic(function_to_correct):
+def check_test_oracle_semantic(function_to_correct):
     if not os.path.exists(os.path.join(os.getcwd(), "temp_dir")):
         os.mkdir(os.path.join(os.getcwd(), "temp_dir"))
 
@@ -110,10 +111,10 @@ def apply_semantix_fix (DATASET, SCRIPT, script_string, output_string, csv_name)
             )
     
     script_name = script_string + SCRIPT + ".py"
-    input_path = os.path.join(CODE_DIR,  SCRIPT, "Codex", script_name)
+    input_path = os.path.join(CODE_DIR,  SCRIPT, MODEL, script_name)
 
     output_name = output_string + SCRIPT + ".py"
-    output_path = os.path.join(CODE_DIR,  SCRIPT, "Codex", output_name)
+    output_path = os.path.join(CODE_DIR,  SCRIPT, MODEL, output_name)
 
    # csv_path = os.path.join(CODE_DIR, csv_name)
     
@@ -123,7 +124,7 @@ def apply_semantix_fix (DATASET, SCRIPT, script_string, output_string, csv_name)
         function_to_correct = input.read()
 
 
-    all_content = check_test_oracle_sematic(function_to_correct)
+    all_content = check_test_oracle_semantic(function_to_correct)
 
     with open(output_path, "w") as output:
         output.write(all_content)
@@ -157,7 +158,7 @@ for i in range(1, 164):
         
     script_name = script_string + SCRIPT + ".py"
     print(script_name)
-    input_path = os.path.join(CODE_DIR,  SCRIPT, "Codex", script_name)
+    input_path = os.path.join(CODE_DIR,  SCRIPT, MODEL, script_name)
 
     if os.path.exists(input_path):
         apply_semantix_fix("HumanEval",SCRIPT, script_string, output_string, csv_name)
@@ -177,7 +178,7 @@ for i in range(1, 164):
 #             )
     
 # script_name = script_string + SCRIPT + ".py"
-# input_path = os.path.join(CODE_DIR,  SCRIPT, "Codex", script_name)
+# input_path = os.path.join(CODE_DIR,  SCRIPT, MODEL, script_name)
 
 # if os.path.exists(input_path):
 #     apply_semantix_fix(DATASET,SCRIPT, script_string, output_string, csv_name)
