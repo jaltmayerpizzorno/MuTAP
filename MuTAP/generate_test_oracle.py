@@ -91,10 +91,9 @@ def call_prompt_on_model(
                 {"role": "system", "content": "Respond with a completion in EXACTLY the same format as the code-davinci-002 model, including any tags."},
                 {"role": "user", "content": prompt}
             ],
-            stop=stop_w,
+            # don't pass stop=: MuTAP uses "```" as a stop word, but GPT models enclose code in "```python" markdown tags
 #            max_tokens=max_tokens,
             temperature=temperature,
-#            stream=True,
         )
 
         explanation_completion = completion.choices[0].message.content
