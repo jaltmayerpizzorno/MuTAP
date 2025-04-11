@@ -1,3 +1,6 @@
+> [!NOTE]
+> This MuTAP fork contains changes to facilitate [CoverUp](https://github.com/plasma-umass/coverup)'s evaluation.
+
 # MuTAP
 
 `MuTAP` is a prompt-based learning technique to generate effective test cases with Large Language Models (LLMs). This is an implementation of a method described in <a href="https://arxiv.org/abs/2308.16557"><strong>Effective Test Generation Using Pre-trained Large Language Models and Mutation Testing</strong></a>. <br />
