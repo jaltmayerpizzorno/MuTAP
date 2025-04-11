@@ -96,6 +96,10 @@ def call_prompt_on_model(
             temperature=temperature,
         )
 
+        import json
+        with open("gpt_completions.jsonl", "a") as f:
+            f.write(json.dumps(completion.to_dict()) + "\n")
+
         explanation_completion = completion.choices[0].message.content
 
         if (m := re.search(r'```python\n(.*?)(?:```|\Z)', explanation_completion, re.DOTALL)):
