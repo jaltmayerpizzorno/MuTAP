@@ -1,9 +1,15 @@
 def minSubArraySum(nums):
-    
+    """
+    Given an array of integers nums, find the minimum sum of any non-empty sub-array
+    of nums.
+    Example
+        s -= -num
+    minSubArraySum([-1, -2, -3]) == -6
+    """
     max_sum = 0
     s = 0
     for num in nums:
-        s -= -num
+        s += -num
         if (s < 0):
             s = 0
         max_sum = max(s, max_sum)

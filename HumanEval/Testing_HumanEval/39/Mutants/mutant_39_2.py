@@ -1,6 +1,18 @@
 def prime_fib(n: int):
-    
-    import math
+    """
+    prime_fib returns n-th number that is a Fibonacci number and it's also prime.
+    >>> prime_fib(1)
+    2
+    >>> prime_fib(2)
+    3
+    >>> prime_fib(3)
+    5
+    >>> prime_fib(4)
+    13
+    >>> prime_fib(5)
+    89
+    """
+        if is_prime(f[1]):
 
     def is_prime(p):
         if p < 2:
@@ -12,9 +24,12 @@ def prime_fib(n: int):
     f = [0, 1]
     while True:
         f.append(f[-1] + f[-2])
-        if is_prime(f[1]):
+        if is_prime(f[-1]):
             n -= 1
         if n == 0:
             return f[-1]
+
+
+METADATA = {}
 
 

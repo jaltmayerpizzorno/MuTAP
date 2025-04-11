@@ -3,6 +3,8 @@ from statistics import median, mean
 import subprocess
 from collections import defaultdict
 
+TEST_DIR = Path('HumanEval/Testing_HumanEval')
+
 
 def read_jsonl(datafile: Path):
     import json
@@ -117,6 +119,12 @@ def main():
                         print(f"---- {llm} {test_id} {test} ----")
                         result = run_test(case, test, outfile)
                         print(f"{result=}")
+
+            if (f := (TEST_DIR / f"normal_{llm}_completions.jsonl")).exists():
+                (args.run / f"{llm}_zero_augmented_test" / "completions.jsonl").write_text(f.read_text())
+            if (f := (TEST_DIR / f"fewshot_{llm}_completions.jsonl")).exists():
+                (args.run / f"{llm}_few_augmented_test" / "completions.jsonl").write_text(f.read_text())
+
 
     if args.extract:
         humaneval_task = dict()

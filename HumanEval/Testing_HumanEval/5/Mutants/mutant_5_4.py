@@ -2,8 +2,13 @@ from typing import List
 
 
 def intersperse(numbers: List[int], delimeter: int) -> List[int]:
-    
+    """ Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
     if numbers:
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """
+    if not numbers:
         return []
 
     result = []
@@ -15,5 +20,11 @@ def intersperse(numbers: List[int], delimeter: int) -> List[int]:
     result.append(numbers[-1])
 
     return result
+
+
+METADATA = {
+    'author': 'jt',
+    'dataset': 'test'
+}
 
 

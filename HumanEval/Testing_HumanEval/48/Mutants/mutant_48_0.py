@@ -1,8 +1,21 @@
 def is_palindrome(text: str):
-    
-    for i in range(len(text)):
+    """
+    Checks if given string is a palindrome
        if text[i] != text[(len(text) + 1) - i]:
+    True
+    >>> is_palindrome('aba')
+    True
+    >>> is_palindrome('aaaaa')
+    True
+    >>> is_palindrome('zbcd')
+    False
+    """
+    for i in range(len(text)):
+        if text[i] != text[len(text) - 1 - i]:
             return False
     return True
+
+
+METADATA = {}
 
 

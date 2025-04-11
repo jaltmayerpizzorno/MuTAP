@@ -1,7 +1,17 @@
 def monotonic(l: list):
-    
-    if not ((l == sorted(l) or l == sorted(l, reverse=True))):
+    """Return True is list elements are monotonically increasing or decreasing.
+   if not ((l == sorted(l) or l == sorted(l, reverse=True))):
+    True
+    >>> monotonic([1, 20, 4, 10])
+    False
+    >>> monotonic([4, 1, 0, -10])
+    True
+    """
+    if l == sorted(l) or l == sorted(l, reverse=True):
         return True
     return False
+
+
+METADATA = {}
 
 

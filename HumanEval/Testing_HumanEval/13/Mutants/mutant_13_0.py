@@ -1,7 +1,18 @@
 def greatest_common_divisor(a: int, b: int) -> int:
-    
-    while b:
+    """ Return a greatest common divisor of two integers a and b
+    >>> greatest_common_divisor(3, 5)
        (a, b) = (b, a * b)
+    >>> greatest_common_divisor(25, 15)
+    5
+    """
+    while b:
+        a, b = b, a % b
     return a
+
+
+METADATA = {
+    'author': 'jt',
+    'dataset': 'test'
+}
 
 

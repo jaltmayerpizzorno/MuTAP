@@ -1,0 +1,97 @@
+def correct_bracketing(brackets: str):
+    
+    depth = 0
+    for b in brackets:
+        if b == "<":
+            depth += 1
+        else:
+            depth -= 1
+        if depth < 0:
+            return False
+    return depth == 0
+
+
+
+
+
+def test():
+
+    assert correct_bracketing("<<>>") == True
+    assert correct_bracketing("<><>") == True
+    assert correct_bracketing("<<>><<>") == False
+    assert correct_bracketing("<<>><>") == True
+    assert correct_bracketing("><<>>") == False
+    assert correct_bracketing("<<<<<>>>>") == False
+    assert correct_bracketing("<>><<>") == False
+    assert correct_bracketing("") == True
+    assert correct_bracketing("<<>>") == True
+    assert correct_bracketing("<><>") == True
+    assert correct_bracketing("<<>><<>") == False
+    assert correct_bracketing("<<>><>") == True
+    assert correct_bracketing("><<>>") == False
+    assert correct_bracketing("<<<<<>>>>") == False
+    assert correct_bracketing("<>><<>") == False
+    assert correct_bracketing("") == True
+    assert correct_bracketing("<") == False
+
+    assert correct_bracketing("<<>>") == True
+    assert correct_bracketing("<><>") == True
+    assert correct_bracketing("<<>><<>") == False
+    assert correct_bracketing("<<>><>") == True
+    assert correct_bracketing("><<>>") == False
+    assert correct_bracketing("<<<<<>>>>") == False
+    assert correct_bracketing("<>><<>") == False
+    assert correct_bracketing("") == True
+    assert correct_bracketing("<<") == False  # New test case to detect the issue
+    assert correct_bracketing(">>") == False  # New test case to detect the issue
+
+    assert correct_bracketing("<<>>") == True
+    assert correct_bracketing("<><>") == True
+    assert correct_bracketing("<<>><<>") == False
+    assert correct_bracketing("<<>><>") == True
+    assert correct_bracketing("><<>>") == False
+    assert correct_bracketing("<<<<<>>>>") == False
+    assert correct_bracketing("<>><<>") == False
+    assert correct_bracketing("") == True
+    assert correct_bracketing("<<<><>>") == False
+
+    assert correct_bracketing("<<>>") == True
+    assert correct_bracketing("<><>") == True
+    assert correct_bracketing("<<>><<>") == False
+    assert correct_bracketing("<<>><>") == True
+    assert correct_bracketing("><<>>") == False
+    assert correct_bracketing("<<<<<>>>>") == False
+    assert correct_bracketing("<>><<>") == False
+    assert correct_bracketing("") == True
+    assert correct_bracketing("<<><><>") == True  # New test case to detect the change
+
+    assert correct_bracketing("<<>>") == True
+    assert correct_bracketing("<><>") == True
+    assert correct_bracketing("<<>><<>") == False
+    assert correct_bracketing("<<>><>") == True
+    assert correct_bracketing("><<>>") == False
+    assert correct_bracketing("<<<<<>>>>") == False
+    assert correct_bracketing("<>><<>") == False
+    assert correct_bracketing("") == True
+    assert correct_bracketing("<<><>>") == True  # New test case
+
+    assert correct_bracketing("<<>>") == True
+    assert correct_bracketing("<><>") == True
+    assert correct_bracketing("<<>><<>") == False
+    assert correct_bracketing("<<>><>") == True
+    assert correct_bracketing("><<>>") == False
+    assert correct_bracketing("<<<<<>>>>") == False
+    assert correct_bracketing("<>><<>") == False
+    assert correct_bracketing("") == True
+    assert correct_bracketing("<<<<<>>>>><<") == False  # new test case to catch the fault
+
+    assert correct_bracketing("<<>>") == True
+    assert correct_bracketing("<><>") == True
+    assert correct_bracketing("<<>><<>") == False
+    assert correct_bracketing("<<>><>") == True
+    assert correct_bracketing("><<>>") == False
+    assert correct_bracketing("<<<<<>>>>") == False
+    assert correct_bracketing("<>><<>") == False
+    assert correct_bracketing("") == True
+    assert correct_bracketing("<") == False  # New test case to detect the change
+
